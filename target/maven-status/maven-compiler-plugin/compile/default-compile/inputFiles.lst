@@ -2,12 +2,10 @@
 /home/agus/Documents/Facultad/AED/Repositorios/ProblemSetUT4/src/main/java/ucu/edu/aed/tda/grafo/IDirectedIGraph.java
 /home/agus/Documents/Facultad/AED/Repositorios/ProblemSetUT4/src/main/java/ucu/edu/aed/tda/grafo/IUndirectedGraph.java
 /home/agus/Documents/Facultad/AED/Repositorios/ProblemSetUT4/src/main/java/ucu/edu/aed/tda/grafo/IUndirectedGraphAlgorithm.java
-/home/agus/Documents/Facultad/AED/Repositorios/ProblemSetUT4/src/main/java/ucu/edu/aed/tda/grafo/implementaciones/AlgoritmosGrafoDirigido.java
-/home/agus/Documents/Facultad/AED/Repositorios/ProblemSetUT4/src/main/java/ucu/edu/aed/tda/grafo/implementaciones/AlgoritmosGrafoNoDirigido.java
-/home/agus/Documents/Facultad/AED/Repositorios/ProblemSetUT4/src/main/java/ucu/edu/aed/tda/grafo/implementaciones/DijkstraResult.java
-/home/agus/Documents/Facultad/AED/Repositorios/ProblemSetUT4/src/main/java/ucu/edu/aed/tda/grafo/implementaciones/FloydWarshallResult.java
-/home/agus/Documents/Facultad/AED/Repositorios/ProblemSetUT4/src/main/java/ucu/edu/aed/tda/grafo/implementaciones/GrafoDirigido.java
-/home/agus/Documents/Facultad/AED/Repositorios/ProblemSetUT4/src/main/java/ucu/edu/aed/tda/grafo/implementaciones/GrafoNoDirigido.java
+/home/agus/Documents/Facultad/AED/Repositorios/ProblemSetUT4/src/main/java/ucu/edu/aed/tda/grafo/implementaciones/dirigido/AlgoritmosGrafoDirigido.java
+/home/agus/Documents/Facultad/AED/Repositorios/ProblemSetUT4/src/main/java/ucu/edu/aed/tda/grafo/implementaciones/dirigido/DijkstraResult.java
+/home/agus/Documents/Facultad/AED/Repositorios/ProblemSetUT4/src/main/java/ucu/edu/aed/tda/grafo/implementaciones/dirigido/FloydWarshallResult.java
+/home/agus/Documents/Facultad/AED/Repositorios/ProblemSetUT4/src/main/java/ucu/edu/aed/tda/grafo/implementaciones/dirigido/GrafoDirigido.java
 /home/agus/Documents/Facultad/AED/Repositorios/ProblemSetUT4/src/main/java/ucu/edu/aed/tda/grafo/model/IGraph.java
 /home/agus/Documents/Facultad/AED/Repositorios/ProblemSetUT4/src/main/java/ucu/edu/aed/tda/grafo/model/edge/DirectedEdge.java
 /home/agus/Documents/Facultad/AED/Repositorios/ProblemSetUT4/src/main/java/ucu/edu/aed/tda/grafo/model/edge/Edge.java
