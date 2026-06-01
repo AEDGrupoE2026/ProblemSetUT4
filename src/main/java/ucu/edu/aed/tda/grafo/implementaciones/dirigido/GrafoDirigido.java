@@ -8,7 +8,9 @@ import java.util.*;
 
 public class GrafoDirigido<V, D> implements IDirectedIGraph<V, D> {
 
+    // conjunto de vertices (no se pueden repetir)
     private final Set<V> vertices = new LinkedHashSet<>();
+    //
     private final Map<V, List<Edge<V, D>>> adjacency = new LinkedHashMap<>();
 
     @Override
