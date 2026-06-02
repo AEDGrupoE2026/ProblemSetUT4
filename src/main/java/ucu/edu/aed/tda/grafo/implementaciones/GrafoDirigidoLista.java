@@ -6,7 +6,7 @@ import ucu.edu.aed.tda.grafo.model.edge.Edge;
 
 import java.util.*;
 
-public class GrafoDirigido<V, D> implements IDirectedIGraph<V, D> {
+public class GrafoDirigidoLista<V, D> implements IDirectedIGraph<V, D> {
 
     // conjunto de vertices (no se pueden repetir)
     private final Set<V> vertices = new LinkedHashSet<>();
@@ -14,7 +14,7 @@ public class GrafoDirigido<V, D> implements IDirectedIGraph<V, D> {
     private final Map<V, List<Edge<V, D>>> adjacency = new LinkedHashMap<>();
 
     @Override
-    public boolean agregarVertice(V vertex) {
+    public boolean agregarVertice(V vertex) { 
         if (vertices.contains(vertex)) return false;
         vertices.add(vertex);
         adjacency.put(vertex, new ArrayList<>());
