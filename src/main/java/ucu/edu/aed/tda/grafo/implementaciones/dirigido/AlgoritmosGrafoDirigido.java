@@ -49,13 +49,142 @@ public class AlgoritmosGrafoDirigido implements IDirectedGraphAlgorithms {
         return new DijkstraResult<>(costs, prev);
     }
 
+    public <V,D extends WeightedEdge> IDijkstraResult<V> dijkstraEsquivandoVertices(Comparable<V> source, IDirectedIGraph<V, D> grafo, Comparable<V> VerticeAEvitar) {
+        Set<V> toAvoid = new HashSet<>();
+        // Add the vertex to avoid to the set
+        toAvoid.add(grafo.buscarVertice(VerticeAEvitar));
+        Map<V, Double> costs = new HashMap<>();
+        Map<V, V> prev = new HashMap<>();
+
+        for (V v : grafo.vertices()) costs.put(v, Double.POSITIVE_INFINITY);
+
+        V src = grafo.buscarVertice(source);
+        costs.put(src, 0.0);
+
+        PriorityQueue<Map.Entry<V, Double>> pq = new PriorityQueue<>(Map.Entry.comparingByValue());
+        pq.add(Map.entry(src, 0.0));
+        Set<V> settled = new HashSet<>();
+
+        while (!pq.isEmpty()) {
+            Map.Entry<V, Double> min = pq.poll();
+            V u = min.getKey();
+            if (settled.contains(u) || toAvoid.contains(u)) continue;
+            settled.add(u);
+
+            for (Edge<V, D> edge : grafo.adyacencias(grafo.construirComparable(u))) {
+                V v = edge.target();
+                double newCost = costs.get(u) + edge.dato().getWeight();
+                if (newCost < costs.getOrDefault(v, Double.POSITIVE_INFINITY)) {
+                    costs.put(v, newCost);
+                    prev.put(v, u);
+                    pq.add(Map.entry(v, newCost));
+                }
+            }
+        }
+
+        return new DijkstraResult<>(costs, prev);
+    }
+
+    public <V,D extends WeightedEdge> IDijkstraResult<V> dijkstraEsquivandoAristas(Comparable<V> source, IDirectedIGraph<V, D> grafo, Set<Edge<V, D>> aristasAEvitar) {
+        Set<Edge<V, D>> toAvoid = aristasAEvitar == null ? new HashSet<>() : new HashSet<>(aristasAEvitar);
+
+        Map<V, Double> costs = new HashMap<>();
+        Map<V, V> prev = new HashMap<>();
+
+        for (V v : grafo.vertices()) costs.put(v, Double.POSITIVE_INFINITY);
+
+        V src = grafo.buscarVertice(source);
+        costs.put(src, 0.0);
+
+        PriorityQueue<Map.Entry<V, Double>> pq = new PriorityQueue<>(Map.Entry.comparingByValue());
+        pq.add(Map.entry(src, 0.0));
+        Set<V> settled = new HashSet<>();
+
+        while (!pq.isEmpty()) {
+            Map.Entry<V, Double> min = pq.poll();
+            V u = min.getKey();
+            if (settled.contains(u)) continue;
+            settled.add(u);
+
+            for (Edge<V, D> edge : grafo.adyacencias(grafo.construirComparable(u))) {
+                if (toAvoid.contains(edge)) continue; // Skip edges to avoid
+                V v = edge.target();
+                double newCost = costs.get(u) + edge.dato().getWeight();
+                if (newCost < costs.getOrDefault(v, Double.POSITIVE_INFINITY)) {
+                    costs.put(v, newCost);
+                    prev.put(v, u);
+                    pq.add(Map.entry(v, newCost));
+                }
+            }
+        }
+
+        return new DijkstraResult<>(costs, prev);
+    }
+
+   public <V, D extends WeightedEdge> IDijkstraResult<V> dijkstraParadaObligatoria(Comparable<V> source,IDirectedIGraph<V, D> grafo,Comparable<V> paradaObligatoria) {
+        V parada = grafo.buscarVertice(paradaObligatoria);
+        if (parada == null) {
+            return null;
+        }
+        IDijkstraResult<V> firstLeg = dijkstra(source, grafo);
+        double sourceToParada = firstLeg.getCost(parada);
+        if (sourceToParada == Double.POSITIVE_INFINITY) {
+            return null;
+        }
+        IDijkstraResult<V> secondLeg = dijkstra(paradaObligatoria, grafo);
+        Map<V, Double> combinedCosts = new HashMap<>();
+        Map<V, V> combinedPrev = new HashMap<>();
+        for (V v : grafo.vertices()) {
+            double paradaToV = secondLeg.getCost(v);
+            if (paradaToV == Double.POSITIVE_INFINITY) {
+                combinedCosts.put(v, Double.POSITIVE_INFINITY);
+            } else {
+                combinedCosts.put(v, sourceToParada + paradaToV);
+            }
+        }
+        return new DijkstraResult<>(combinedCosts, combinedPrev);
+    }
+
+    public <V,D extends WeightedEdge> IDijkstraResult<V> dijkstraEvadiendoRutasPorTiempo(Comparable<V> source, IDirectedIGraph<V, D> grafo, Comparable<D> valoresAEvitar) {
+
+        Map<V, Double> costs = new HashMap<>();
+        Map<V, V> prev = new HashMap<>();
+
+        for (V v : grafo.vertices()) costs.put(v, Double.POSITIVE_INFINITY);
+
+        V src = grafo.buscarVertice(source);
+        costs.put(src, 0.0);
+
+        PriorityQueue<Map.Entry<V, Double>> pq = new PriorityQueue<>(Map.Entry.comparingByValue());
+        pq.add(Map.entry(src, 0.0));
+        Set<V> settled = new HashSet<>();
+
+        while (!pq.isEmpty()) {
+            Map.Entry<V, Double> min = pq.poll();
+            V u = min.getKey();
+            if (settled.contains(u)) continue;
+            settled.add(u);
+
+            for (Edge<V, D> edge : grafo.adyacencias(grafo.construirComparable(u))) {
+                if (valoresAEvitar.compareTo(edge.dato()) < 0) continue; // Skip edges with values to avoid
+                V v = edge.target();
+                double newCost = costs.get(u) + edge.dato().getWeight();
+                if (newCost < costs.getOrDefault(v, Double.POSITIVE_INFINITY)) {
+                    costs.put(v, newCost);
+                    prev.put(v, u);
+                    pq.add(Map.entry(v, newCost));
+                }
+            }
+        }
+
+        return new DijkstraResult<>(costs, prev);
+    }
+
     @Override
     public <V, D extends WeightedEdge> IFloydWarshallResult<V> floyd(IDirectedIGraph<V, D> grafo) {
         List<V> vList = new ArrayList<>(grafo.vertices());
-
         Map<V, Map<V, Double>> dist = new HashMap<>();
         Map<V, Map<V, V>> next = new HashMap<>();
-
         for (V i : vList) {
             dist.put(i, new HashMap<>());
             next.put(i, new HashMap<>());
@@ -63,7 +192,6 @@ public class AlgoritmosGrafoDirigido implements IDirectedGraphAlgorithms {
                 dist.get(i).put(j, i.equals(j) ? 0.0 : Double.POSITIVE_INFINITY);
             }
         }
-
         for (Edge<V, D> edge : grafo.aristas()) {
             V u = edge.source();
             V v = edge.target();
@@ -73,7 +201,6 @@ public class AlgoritmosGrafoDirigido implements IDirectedGraphAlgorithms {
                 next.get(u).put(v, v);
             }
         }
-
         for (V k : vList) {
             for (V i : vList) {
                 for (V j : vList) {
@@ -92,6 +219,7 @@ public class AlgoritmosGrafoDirigido implements IDirectedGraphAlgorithms {
 
         return new FloydWarshallResult<>(dist, next);
     }
+    
 
     // Warshall: cierre transitivo. Usa peso 1 por arista (cuenta saltos, no pesos reales)
     @Override
